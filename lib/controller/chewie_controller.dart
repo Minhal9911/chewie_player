@@ -18,89 +18,87 @@ class VideoController extends GetxController {
     "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
     "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
     "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
-
   ];
-
-/*  void autoHideMethod(){
-    debounce(showIcon, (_) {
-      showIcon.value = false;
-    }, time: const Duration(seconds: 3));
-  }*/
-/*
-  void toggleControls() {
-    debugPrint('showIv:${showIcon.value}');
-    showIcon.value = true;
-    debugPrint('showIconv:${showIcon.value}');
-  }*/
 
   Future<void> initializePlayer(String url) async {
     try {
       isInitialisedPlayer.value = false;
-      if(videoPlayerController != null && videoPlayerController!.value.isInitialized){
-        await videoPlayerController!.dispose();
+      if (videoPlayerController != null && videoPlayerController!.value.isInitialized) {
+        videoPlayerController!.dispose();
       }
-      if(chewieController !=null){
+      if (chewieController != null) {
         chewieController!.dispose();
       }
       debugPrint('initialising start');
       videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(url));
-      videoPlayerController!.initialize().then((_) {
-        chewieController = ChewieController(
-          videoPlayerController: videoPlayerController!,
-          autoPlay: true,
-          looping: false,
-          autoInitialize: true,
-          allowFullScreen: true,
-          allowedScreenSleep: false,
-          showOptions: true,
-          showControlsOnInitialize: true,
-          materialProgressColors: ChewieProgressColors(
-              playedColor: Colors.red,
-              bufferedColor: Colors.grey,
-              handleColor: Colors.red,
-              backgroundColor: Colors.white),
-          placeholder: Container(
-            color: Colors.white,
-            child: const Center(
-              child: CircularProgressIndicator(color: Colors.white),
-            ),
+
+      await videoPlayerController!.initialize();
+
+      chewieController = ChewieController(
+        videoPlayerController: videoPlayerController!,
+        autoPlay: true,
+        looping: false,
+        autoInitialize: true,
+        allowFullScreen: true,
+        allowedScreenSleep: false,
+        showOptions: true,
+        showControlsOnInitialize: true,
+        materialProgressColors: ChewieProgressColors(
+            playedColor: Colors.red,
+            bufferedColor: Colors.grey,
+            handleColor: Colors.red,
+            backgroundColor: Colors.white),
+        placeholder: Container(
+          color: Colors.white,
+          child: const Center(
+            child: CircularProgressIndicator(color: Colors.white),
           ),
-        );
-        isInitialisedPlayer.value = true;
-      });
-            videoPlayerController!.addListener(() {
-      if (videoPlayerController!.value.position ==
-          videoPlayerController!.value.duration) {
-        if (chewieController != null && chewieController!.isFullScreen) {
-          debugPrint('isFullScreen:${chewieController!.isFullScreen}');
-          chewieController!.exitFullScreen();
+        ),
+      );
+
+      isInitialisedPlayer.value = true;
+
+      videoPlayerController!.addListener(() async {
+        if (videoPlayerController!.value.position.inSeconds ==
+            videoPlayerController!.value.duration.inSeconds) {
+          if (chewieController != null && chewieController!.isFullScreen) {
+            // debugPrint('isFullScreen:${chewieController!.isFullScreen}');
+            chewieController!.exitFullScreen();
+          }
+          playNextVideo();
         }
-        // playNextVideo();
-      }
-    });
-      update();
+      });
+      // update();
     } catch (e) {
       debugPrint('error:${e.toString()}');
     }
   }
 
-  void playNextVideo() {
-    if (currentIndex.value < videoUrls.length - 1) {
-      debugPrint('AutoIndex:${currentIndex.value}}');
-      currentIndex.value++;
-      debugPrint('AutoCurrentIndex:${currentIndex.value}}');
-      initializePlayer(videoUrls[currentIndex.value]);
+  void playNextVideo() async {
+    try {
+      if (currentIndex.value < videoUrls.length - 1) {
+        debugPrint('AutoIndex:${currentIndex.value}}');
+        currentIndex.value++;
+        debugPrint('AutoCurrentIndex:${currentIndex.value}}');
+        await initializePlayer(videoUrls[currentIndex.value]);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 
   void playSelectedVideo(int index) {
-    if (chewieController != null && chewieController!.isPlaying) {
-      chewieController!.pause();
+    try {
+      if (chewieController != null && chewieController!.isPlaying) {
+        chewieController!.pause();
+      }
+      debugPrint('PIndex:$index');
+      currentIndex.value = index;
+      debugPrint('currentIndex:$index}');
+      initializePlayer(videoUrls[currentIndex.value]);
+    } catch (e) {
+      debugPrint(e.toString());
     }
-    debugPrint('PIndex:$index');
-    currentIndex.value = index;
-    debugPrint('currentIndex:$index}');
-    initializePlayer(videoUrls[currentIndex.value]);
   }
 
   void seekForward() {
@@ -115,7 +113,27 @@ class VideoController extends GetxController {
     videoPlayerController!.seekTo(targetPosition);
   }
 
-  /*List<Map<String, String>> videoQualities = [
+  @override
+  void onClose() {
+    videoPlayerController!.dispose();
+    chewieController!.dispose();
+    super.onClose();
+  }
+}
+
+/*  void autoHideMethod(){
+    debounce(showIcon, (_) {
+      showIcon.value = false;
+    }, time: const Duration(seconds: 3));
+  }*/
+/*
+  void toggleControls() {
+    debugPrint('showIv:${showIcon.value}');
+    showIcon.value = true;
+    debugPrint('showIconv:${showIcon.value}');
+  }*/
+
+/*List<Map<String, String>> videoQualities = [
     {
       '480p': 'https://www.example.com/video1_480p.mp4',
       '720p': 'https://www.example.com/video1_720p.mp4',
@@ -136,18 +154,10 @@ class VideoController extends GetxController {
   String currentQuality = '720p'; // Default quality
 */
 
-  /* void changeVideoQuality(String quality) {
+/* void changeVideoQuality(String quality) {
     currentQuality = quality;
     String newUrl = videoQualities[currentIndex.value][quality]!;
     videoPlayerController.pause(); // Pause the video
     _initializePlayer(newUrl); // Reinitialize with the new quality URL
   }
 */
-
-  @override
-  void onClose() {
-    videoPlayerController!.dispose();
-    chewieController!.dispose();
-    super.onClose();
-  }
-}

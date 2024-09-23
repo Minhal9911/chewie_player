@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
     return Center(
       child: ElevatedButton(
         onPressed: () {
-          Get.to(() => const MyCourseDetail());
+          Get.to(() => const VideoPlayerWidget());
         },
         child: const Text('Video Player'),
       ),

@@ -3,24 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:poc_flutter/controller/chewie_controller.dart';
 
-class ChewiePlayer extends StatefulWidget {
+class ChewiePlayer extends StatelessWidget {
   const ChewiePlayer({super.key});
 
-  @override
-  State<ChewiePlayer> createState() => _ChewiePlayerState();
-}
-
-class _ChewiePlayerState extends State<ChewiePlayer> {
-  final controller = Get.find<VideoController>();
-
-  @override
-  void initState() {
-    super.initState();
-    // controller.autoHideMethod();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<VideoController>();
     return Obx(() {
       if (controller.isInitialisedPlayer.value) {
         return Chewie(controller: controller.chewieController!);
@@ -30,6 +19,7 @@ class _ChewiePlayerState extends State<ChewiePlayer> {
     });
   }
 }
+
 /*       Obx(() => controller.showIcon.value
                 ? Positioned(
                     top: 4,

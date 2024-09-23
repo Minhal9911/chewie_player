@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 import 'package:poc_flutter/controller/chewie_controller.dart';
 import 'package:poc_flutter/widgets/chewie_player.dart';
 
-class MyCourseDetail extends StatefulWidget {
-  const MyCourseDetail({super.key});
+class VideoPlayerWidget extends StatefulWidget {
+  const VideoPlayerWidget({super.key});
 
   @override
-  State<MyCourseDetail> createState() => _MyCourseDetailState();
+  State<VideoPlayerWidget> createState() => _VideoPlayerWidgetState();
 }
 
-class _MyCourseDetailState extends State<MyCourseDetail> {
+class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   final controller = Get.put(VideoController());
 
   @override
@@ -53,7 +53,7 @@ class _MyCourseDetailState extends State<MyCourseDetail> {
   }
 }
 
-class CustomControls extends StatelessWidget {
+/*class CustomControls extends StatelessWidget {
   final ChewieController chewieController;
 
   const CustomControls({
@@ -101,4 +101,4 @@ class CustomControls extends StatelessWidget {
       ],
     );
   }
-}
+}*/
