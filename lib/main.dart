@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:poc_flutter/screen/demo.dart';
+import 'package:poc_flutter/screen/intro_screen.dart';
+import 'package:poc_flutter/screen/onboard_screen.dart';
+import 'package:poc_flutter/screen/share_ui.dart';
 import 'package:poc_flutter/screen/video_screen.dart';
 import 'package:get/get.dart';
 import 'package:poc_flutter/screen/home_page.dart';
@@ -15,13 +17,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const OnboardScreen(),
     );
   }
 }

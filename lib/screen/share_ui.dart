@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class ShareButton extends StatefulWidget {
-  const ShareButton({super.key});
+class AnimatedShare extends StatefulWidget {
+  const AnimatedShare({super.key});
 
   @override
-  State<ShareButton> createState() => _ShareButtonState();
+  State<AnimatedShare> createState() => _AnimatedShareState();
 }
 
-class _ShareButtonState extends State<ShareButton>
-    with SingleTickerProviderStateMixin {
-  bool isExpanded = false;
+class _AnimatedShareState extends State<AnimatedShare> {
+  RxBool isExpanded = false.obs;
 
-  // Trigger to expand/collapse buttons
   void toggleButtons() {
-    setState(() {
-      isExpanded = !isExpanded;
-    });
+    isExpanded.value= !isExpanded.value;
+
   }
 
   @override
@@ -26,38 +24,44 @@ class _ShareButtonState extends State<ShareButton>
         centerTitle: true,
         title: const Text('Animated Share UI'),
       ),
-      body: Stack(
+      body: Obx(()=>Stack(
         children: [
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
-            right: isExpanded ? 110.0 : size.width / 2-25,
-            bottom: isExpanded ? 85.0 : 0.0,
+            right: isExpanded.value ? 110.0 : size.width / 2-25,
+            bottom: isExpanded.value ? 85.0 : 0.0,
             child: AnimatedOpacity(
-              opacity: isExpanded ? 1.0 : 0.0,
+              opacity: isExpanded.value ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 300),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
                       onPressed: () {},
-                      icon: Image.asset('assets/linkedIn_logo.png',scale: 1.9)),
-                  const Text('LinkedIn Post',style: TextStyle(fontSize: 12,color: Colors.black)),
+                      icon: Image.asset('assets/linkedIn_logo.png',scale: 2)),
+                  const Text('LinkedIn Post',style: TextStyle(fontSize: 10,color: Colors.black)),
                 ],
               ),
             ),
           ),
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
-            left: isExpanded ? 110.0 : size.width / 2-25,
-            bottom: isExpanded ? 85.0 : 0.0,
+            left: isExpanded.value ? 110.0 : size.width / 2-25,
+            bottom: isExpanded.value ? 85.0 : 0.0,
             child: AnimatedOpacity(
-              opacity: isExpanded ? 1.0 : 0.0,
+              opacity: isExpanded.value ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 300),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
                       onPressed: () {},
-                      icon: Image.asset('assets/insta.png', scale: 1.9)),
-                  const Text('Insta Post',style: TextStyle(fontSize: 12,color: Colors.black)),
+                      icon: Image.asset('assets/insta.png', scale: 2)),
+                  const Text('Insta Post',style: TextStyle(fontSize: 10,color: Colors.black)),
                 ],
               ),
             ),
@@ -76,7 +80,7 @@ class _ShareButtonState extends State<ShareButton>
             ),
           ),
         ],
-      ),
+      ),)
     );
   }
 }
